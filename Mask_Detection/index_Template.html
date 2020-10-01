@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+    <meta charset="UTF-8">
+    <title>Social Distance Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            overflow-x: hidden;
+            overflow-y: hidden;
+            background-color: #2e2e2e;
+        }
+
+        h2 {
+            color: white;
+            margin-left: 20px;
+            font-size: 24px;
+            font-family: Tahoma;
+        }
+
+        span {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <input id="hidden_class" type="hidden" value="{traffic_light}" />
+
+    <!-- partial:index.partial.html -->
+    <center>
+        <div class="container">
+            <div id="red" class="circle" color="red"></div>
+            <div id="yellow" class="circle" color="yellow"></div>
+            <div id="green" class="circle" color="green"></div>
+        </div>
+    </center>
+    <br />
+    <div id="condiv">
+        <div>
+            <h2> Number estimated of people currently in store: <span>{count}</span></h2>
+            <h2> Maximum Number of people permitted to be in store store: <span>{max_count}</span></h2>
+            <h2> Current Capacity Percentage: <span id="perc">{perc}</span></h2>
+            <h2> Can Enter Location: <span>{can_enter}</span></h2>
+        </div>
+    </div>
+    <!-- partial -->
+    <script src="jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var activ_class = "green";
+
+            $("#" + activ_class).addClass(activ_class);
+
+            setInterval(function () {
+
+                $("#condiv").load("index.html #condiv");
+                var perc = $("#perc").text()
+                perc = Number(perc.substring(0, perc.length - 1));
+                var change = false;
+                if (perc < 100) {
+                    if (activ_class != "green")
+                        change = true;
+                    activ_class = "green";
+                }
+
+                else if (perc == 100) {
+                    if (activ_class != "yellow")
+                        change = true;
+                    activ_class = "yellow";
+                }
+
+                else {
+                    if (activ_class != "red")
+                        change = true;
+                    activ_class = "red";
+                }
+                if (change) {
+                    $(".circle").removeClass("red");
+                    $(".circle").removeClass("yellow");
+                    $(".circle").removeClass("green");
+                    $("#" + activ_class).addClass(activ_class);
+                }
+
+            }, 1000)
+        })
+    </script>
+</body>
+</html>
